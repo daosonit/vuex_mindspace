@@ -4,19 +4,46 @@
         <hr>
         <div class="row" v-for="user in users">
             <h4>{{ user.name }}</h4>
-            <button @click="registerUser(user)">Register</button>
+            <button @click="registerUser(user)">Đăng ký</button>
         </div>
     </div>
 </template>
 
 <script>
+    import  {mapGetters} from 'vuex';
     export default {
-        props: ['users'],
+        computed: {
+
+            ...mapGetters({
+                users: 'unregisteredUsers'
+            }),
+
+            //Trả ra gia trị của users được lấy từ getter
+            /* users(){
+             return this.$store.getters.unregisteredUsers;
+             },*/
+        },
         methods: {
             registerUser(user) {
-                this.$emit('userRegistered', user);
-                user.registered = true;
-            }
+                this.$store.dispatch('ACTION_REGISTER', user.id);
+            },
+
+            /* registerUser(user) {
+             this.$store.commit('MUTATIONS_REGISTER', user.id);
+             },*/
+
+            /*registerUser(user) {
+             const date = new Date;
+
+             //Gan gia tri da dang ky cho users
+             user.registered = true;
+
+             //push user vào  mảng registrations chưa đang ky sang dang ky
+             this.$store.state.registrations.push({
+             userId: user.id,
+             name: user.name,
+             date: date.getMonth() + '/' + date.getDay()
+             });*/
         }
     }
 </script>

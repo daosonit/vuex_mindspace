@@ -5,27 +5,61 @@
             <h5>Total: {{ total }}</h5>
         </div>
         <hr>
+
         <div class="row" v-for="registration in registrations">
             <h4>{{ registration.name }}</h4>
-            <span @click="unregister(registration)">(Unregister)</span>
+            <span @click="unregister(registration)">(Hủy)</span>
             <div class="date">{{ registration.date }}</div>
         </div>
     </div>
 </template>
 
 <script>
+    import  {mapGetters} from 'vuex';
     export default {
-        props: ['registrations'],
-        methods: {
-            unregister(registration) {
-                this.$emit('userUnregistered', registration);
-            }
-        },
         computed: {
-            total() {
-                return this.registrations.length;
+            ...mapGetters({
+                registrations: 'registrations',
+                total: 'totalRegistrations'
+            }),
+            /* registrations(){
+             return this.$store.getters.registrations;
+             },
+             total(){
+             return this.$store.getters.totalRegistrations;
+             }*/
+        },
+
+        methods: {
+
+            unregister(registration)
+            {
+                this.$store.dispatch('ACTION_UNREGISTER',{
+                    type: 'MUTATIONS_UNREGISTER',
+                    userId: registration.userId
+                });
             }
+
+           /* unregister(registration)
+            {
+                this.$store.commit({
+                    type: 'MUTATIONS_UNREGISTER',
+                    userId: registration.userId
+                });
+            }*/
+
+            /*  unregister(registration)
+             {
+             const user = this.$store.state.users.find(user => {
+             return user.id == registration.userId;
+             });
+
+             user.registered = false;
+
+             this.$store.state.registrations.splice(this.$store.state.registrations.indexOf(registration), 1);
+             }*/
         }
+
     }
 </script>
 
